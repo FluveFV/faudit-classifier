@@ -1,0 +1,42 @@
+# FamilyAudit-Classifier Configuration
+
+metadata:
+  name: FamilyAudit-Classifier
+  description: >
+    A multiclass sequence classifier based on BERT base Italian, fine-tuned on corpora
+    from municipalities and organizations. It predicts labels from a taxonomy to
+    categorize Family Audit plans given a title, description, and objective. The model
+    is designed for further fine-tuning on new data.
+  kind: product-template
+  ai: NLP
+  domain: PA
+  license: Apache License 2.0
+
+model:
+  base_model: bert-base-italian-xxl-cased
+  type: Multiclass sequence classifier
+  fine_tuning: Supported
+  input:
+    - title + description + objective
+  output:
+    - label
+  purpose: >
+    To suggest one or more labels from the taxonomy needed to categorize Family Audit plans.
+
+usage:
+  target_users:
+    - PA operators (municipalities, regional operators, etc.)
+    - Organization operators
+  applications:
+    - Suggesting taxonomy labels for Family Audit plans by facilitating AI integration in PA-user interfaces.
+  documentation_links:
+    - usage: ./docs/usage.md
+
+how_to:
+  steps:
+    - step: Preprocess corpora for training
+      documentation: ./docs/howto/process.md
+    - step: Train the classifier model
+      documentation: ./docs/howto/train.md
+    - step: Predict labels for new Family Audit plans
+      documentation: ./docs/howto/predict.md
