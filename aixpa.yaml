@@ -1,5 +1,7 @@
 # FamilyAudit-Classifier Configuration
-
+ai: NLP
+domain: PA
+usages: ./docs/usage.md
 metadata:
   name: FamilyAudit-Classifier
   description: >
