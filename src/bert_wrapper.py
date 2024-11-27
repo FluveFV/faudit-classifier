@@ -12,6 +12,8 @@ from datetime import date, datetime
 
 import pandas as pd
 
+import json
+
 class BertForSentenceClassification(PreTrainedModel):
 
     """
@@ -105,10 +107,14 @@ class TrainerHandler:
 
         Args:
             logits: Model logits from the predictions.
-            labels: True label IDs from the predictions.
+            labels: Ground truth label indexes from the predictions.
         """
         now = datetime.today()
-        inverted_label_mapping = {v: k for k, v in self.label_mapping.items()}
+        inverted_label_mapping = {int(v): k for k, v in self.label_mapping.items()}
+        # saving the mapping to sparse for later prediction
+        pd.DataFrame(list(inverted_label_mapping.items()), columns=["Mapped", "Original"]).to_json(self.model_save_path + "/label_mapping.json",
+                                                                                                   orient="records",
+                                                                                                   lines=False)
         predicted_indices = logits.argmax(dim=1)
         predicted_labels = [inverted_label_mapping[idx.item()] for idx in predicted_indices]
         true_labels = [inverted_label_mapping[idx.item()] for idx in labels]

@@ -87,7 +87,7 @@ trainer = Trainer(
     callbacks=[EarlyStoppingCallback(early_stopping_patience=2)]
 )
 
-trainer.tokenizer = tokenize_function.get_tokenizer()
+trainer.tokenizer = tokenize_function.get_tokenizer()  #this is done separately to avoid issues of circular import.
 
 if __name__ == "__main__":
     handler = TrainerHandler(
