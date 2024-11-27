@@ -18,6 +18,7 @@ This project has been implemented in docker.
 The usage for this template is to facilitate the integration of AI in two PA-user interfaces:
 - PA operators (from municipalities, regional operators, etc.)
 - Organization operators
+
 More details in the usage section [here](./docs/usage.md).
 
 ## How To
