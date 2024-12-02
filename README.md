@@ -7,9 +7,8 @@
 -   `domain`: PA
 
 Multiclass sequence classifier based on BERT base italian, fine-tuned on selected corpora from Municipalities. 
-The classifier is trained to suggest one or more labels within the Family Audit framework. 
-More specifically, the classifier can predict the category of the action ("azione") of the text describing it. Within the Family Audit's framework's taxonomy. 
-Given that the category of action for Municipalities is univocally connected with one macrocategory and one field, this classifier can also indicate which macrocategory ("macrocategoria") and field ("campo") of the action the text belongs to. 
+The classifier is trained to suggest one or more labels within the Family Audit framework. More specifically, the classifier can predict the category of the action ("azione") of the text describing it.
+Given that the category of action for Municipalities is univocally connected with one macrocategory ("macrocategoria") and one field ("campo"), this classifier can also indicate which macrocategory and field of the action the text belongs to. 
 
 The model can be trained for further fine-tuning on new data. 
 At the time of writing, this README is structured on similar tools such as [EuroVoc-Classifier](https://github.com/tn-aixpa/eurovoc-classifier/blob/main/README.md) and its [previous version](https://github.com/bocchilorenzo/AutoEuroVoc/blob/main/README.md).
