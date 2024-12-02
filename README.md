@@ -6,19 +6,21 @@
 -   `ai`: NLP
 -   `domain`: PA
 
-Multiclass sequence classifier based on BERT base italian, fine-tuned on selected corpora from Municipalities. 
+Multiclass sequence classifier based on BERT base italian, fine-tuned on selected corpora from Municipalities's Family Audit plans. 
+
 The classifier is trained to suggest one or more labels within the Family Audit framework. More specifically, the classifier can predict the category of the action ("azione") of the text describing it.
-Given that the category of action for Municipalities is univocally connected with one macrocategory ("macrocategoria") and one field ("campo"), this classifier can also indicate which macrocategory and field of the action the text belongs to. 
+Given that the category of action for Municipalities is univocally connected with one macrocategory ("macrocategoria") and one field ("campo"), this classifier can be used to indicate which macrocategory and field of the action the text belongs to. 
 
 The model can be trained for further fine-tuning on new data. 
-At the time of writing, this README is structured on similar tools such as [EuroVoc-Classifier](https://github.com/tn-aixpa/eurovoc-classifier/blob/main/README.md) and its [previous version](https://github.com/bocchilorenzo/AutoEuroVoc/blob/main/README.md).
-Ultimately, this project has been implemented in docker. 
+At the time of writing, this ```README``` is structured on similar tools such as [EuroVoc-Classifier](https://github.com/tn-aixpa/eurovoc-classifier/blob/main/README.md) and its [previous version](https://github.com/bocchilorenzo/AutoEuroVoc/blob/main/README.md).
+
 
 ## Usage
 
-The usage for this template is to facilitate the integration of AI in two PA-user interfaces:
+The usage for this template is to facilitate the integration of AI in PA-user interfaces:
 - PA operators (from municipalities, regional operators, etc.)
 More details in the usage section [here](./docs/usage.md).
+
 
 ## How To
 
