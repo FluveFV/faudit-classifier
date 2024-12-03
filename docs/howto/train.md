@@ -108,6 +108,13 @@ If the data is compatible and the choice of parameters does not raise any errors
 
 The results of training can be further analyzed from the output file inside `/results` that contains the predictions on the test set and the ground truth, along with the positions of the test set observations that represent the positions of the observations in the input dataset.
 
+### Resume training
+As the state of the model is saved at each checkpoint, one can resume the training - or continue training any pre-trained version, in case there is new data available. Inside of bert_wrapper.py this line can be added inside ```TrainerHandler``` under ```def run(self)```:
+``` python
+trainer.train(resume_from_checkpoint=True)
+```
+
+
 # Addestrare il classificatore per FamilyAudit
 
 Nell'occorrenza di nuovi dati per addestrare il modello, si consiglia di controllare la compatibilità con il documento [data preprocessing](https://github.com/FluveFV/faudit-classifier/blob/main/docs/howto/process.md).
