@@ -1,6 +1,8 @@
 import pandas as pd
 import numpy as np
+import json
 import torch
+from numpyencoder import NumpyEncoder
 from sklearn.model_selection import StratifiedShuffleSplit
 from datasets import Dataset, DatasetDict
 
@@ -26,7 +28,7 @@ class Dataloader:
         self.dataset = None
         self.num_labels = None
         self.class_weights = None
-        self.label_mapping = None
+        self.encoding, self.reverse_encoding = None, None
 
     def load_data(self):
         """Loads the file and prepares the dataset."""
@@ -42,7 +44,7 @@ class Dataloader:
             raise ValueError(f"Unsupported file type: {self.file_type}")
         self.df = loaders[self.file_type](self.file_path, **self.kwargs).reset_index()
 
-        # labels should start from 0; they will be mapped back
+        # Labels should start from 0; they will be mapped back
         # when saving the predicted results
         if self.df[self.label_column].min() == 1:
             self.df[self.label_column] -= 1
@@ -50,8 +52,15 @@ class Dataloader:
         # Map labels to dense for CrossEntropyL (the italian BERT doesn't like sparse arrays)
         unique_labels, label_counts = np.unique(self.df[self.label_column], return_counts=True)
         self.num_labels = len(unique_labels)
-        self.label_mapping = {old_label: new_label for new_label, old_label in enumerate(unique_labels)}
-        self.df[self.label_column] = self.df[self.label_column].map(self.label_mapping)
+        self.encoding = {label:idx for idx,label in enumerate(unique_labels)}
+        self.reverse_encoding = {idx:label for idx,label in enumerate(unique_labels)}
+        self.df[self.label_column] = self.df[self.label_column].map(self.encoding)
+        # saving the reverse indexing
+        with open("reverse_encoding.json", "w") as f:
+            json.dump(self.reverse_encoding, f,
+                      indent=4, sort_keys=True,
+                      separators=(', ', ': '), ensure_ascii=False,
+                      cls=NumpyEncoder)
 
         # Class weights
         inverse = 1 / label_counts
@@ -121,13 +130,24 @@ class Dataloader:
             raise ValueError("Number of labels not available. Call load_data() first.")
         return self.num_labels
 
-    def get_label_mapping(self):
+    def get_encoding(self):
         """
         Retrieves the mapping of labels to categories.
 
         Returns:
             dict: Mapping of label IDs to their respective categories.
         """
-        if self.label_mapping is None:
-            raise ValueError("Label mapping not computed. Call load_data() first.")
-        return self.label_mapping
+        if self.encoding is None:
+            raise ValueError("Label mapping nonexistent. Call load_data() first.")
+        return self.encoding
+
+    def get_r_encoding(self):
+        """
+        Retrieves the mapping of labels to categories.
+
+        Returns:
+            dict: Mapping of label IDs to their respective categories.
+        """
+        if self.reverse_encoding is None:
+            raise ValueError("Label mapping nonexistent. Call load_data() first.")
+        return self.reverse_encoding
