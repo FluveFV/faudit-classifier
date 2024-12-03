@@ -24,8 +24,7 @@ More details in the usage section [here](./docs/usage.md).
 
 ## How To
 
--   [Set up Docker](./docs/howto/docker.md)
--   [Preprocess corpora for training](./docs/howto/process.md)
+-   [Preprocess corpora for training](./src/preprocess.ipynb)
 -   [Train the classifier model](./docs/howto/train.md)
 -   [Predict labels given a new plan](./docs/howto/predict.md)
 
