@@ -19,7 +19,7 @@ At the time of writing, this ```README``` is structured on similar tools such as
 
 The usage for this template is to facilitate the integration of AI in PA-user interfaces:
 - PA operators (from municipalities, regional operators, etc.)
-More details in the usage section [here](./docs/usage.md).
+More details in the usage section [here](./docs/howto.md).
 
 
 ## How To
