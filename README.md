@@ -28,6 +28,8 @@ More details in the usage section [here](./docs/usage.md).
 -   [Train the classifier model](./docs/howto/train.md)
 -   [Predict labels given a new plan](./docs/howto/predict.md)
 
+There is a short version of the data used for training [here](./src/addestramento.gzip).
+
 ## License
 
 [Apache License 2.0](./LICENSE)
