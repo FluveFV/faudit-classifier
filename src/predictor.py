@@ -154,7 +154,8 @@ while testing_model == 'y':
     testing_model = correct_input()
 
 
-## debugging set: in case the model isn't loading, you can try to use the following to run the prediction on 300 observations
+## debugging set: to check if on a larger number of observations
+# the model loads the weights correctly, you can try to use the following to run the prediction on 300 observations
 test = pd.read_csv('dataset_BERT/addestramento.csv').iloc[:100, -2:]
 t = test.text.tolist()
 pred = []
