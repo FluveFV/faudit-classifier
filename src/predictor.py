@@ -90,63 +90,55 @@ def multiple_labels(inputs):
         sigmoid = torch.nn.Sigmoid()
         probs = sigmoid(logits.squeeze().cpu())
         predictions = np.zeros(probs.shape)
-        predictions[np.where(probs >= 0.5)] = 1
+        predictions[np.where(probs >= 0.6)] = 1
         result = [label_mapping[idx] + 1 for idx, label in enumerate(predictions) if label == 1.0]
         return result
-
-print('Start prediction?')
-testing_model = correct_input()
 def answer(ID_tassonomia):
     """
     Given the label(s), retrieves from the taxonomy the rest of the information about the prediction.
-    :param ID_tassonomia: int, list, or tensor - the ID(s) of the tassonomia.
+    :param ID_tassonomia: int, list - the ID(s) of the tassonomia.
     :return: List of tuples with (azione, campi, descrizione_codice_campo, macroambiti, descrizione_codice_macro).
     """
-    # Ensure ID_tassonomia is iterable
-    if not isinstance(ID_tassonomia, (list, np.ndarray, torch.Tensor)):
-        ID_tassonomia = [ID_tassonomia]
+    dID, c, cd, m, md = correspondence.loc[
+        correspondence.ID_tassonomia == ID_tassonomia, ['azione', 'campi', 'descrizione_codice_campo', 'macroambiti',
+                                                        'descrizione_codice_macro']].values[0]
+    return dID, c, cd, m, md
 
-    results = []
-    for ID in ID_tassonomia:
-        matches = correspondence.loc[correspondence.ID_tassonomia == ID,
-                                     ['azione', 'campi', 'descrizione_codice_campo', 'macroambiti', 'descrizione_codice_macro']]
-        if not matches.empty:
+print('Start prediction?')
+testing_model = correct_input()
 
-            results.append(tuple(matches.iloc[0]))
-        else:
 
-            results.append(('','','','',''))
-
-    return results
 while testing_model == 'y':
     description = get_multiline_input()
     inputs = tokenizer(description, return_tensors="pt", truncation=True, padding=True, return_token_type_ids=False)
     if k > 1:
+        #Multilabel case
         pred = multiple_labels(inputs)
         print('___________  Result:  ___________')
-        results = answer(pred)
         print('ID tassonomie di azione:')
         print(pred)
-        for result in results:
-            dID, c, cd, m, md = result
+        for el in pred:
+            dID, c, cd, m, md = answer(el)
             print(f'ID tassonomia di azione: {dID}')
             if map:
-                print(f'Campo: {c}, {cd}')
-                print(f'Macroambito: {m}, {md}')
+                print('Campi:')
+                print(c)
+                print('Macroambiti:')
+                print(m)
         print('__________________________________')
 
     else:
+        #Single label case
         pred = one_label(inputs)
+        result = answer(pred)
         print('___________  Result:  ___________')
-        dID, c, _, m, _ = [answer(i) for i in pred]
+        dID, c, cd, m, md = result
         print('ID tassonomie di azione:')
         print(pred)
         print(dID)
-        if map == False:
-            print('Campi:')
-            print(c)
-            print('Macroambiti:')
-            print(m)
+        if map:
+            print(f'Campo: {c}, {cd}')
+            print(f'Macroambito: {m}, {md}')
         print('__________________________________')
 
     print()
@@ -154,8 +146,7 @@ while testing_model == 'y':
     testing_model = correct_input()
 
 
-## debugging set: to check if on a larger number of observations
-# the model loads the weights correctly, you can try to use the following to run the prediction on 300 observations
+## debugging set: in case the model isn't loading, you can try to use the following to run the prediction on 300 observations
 test = pd.read_csv('dataset_BERT/addestramento.csv').iloc[:100, -2:]
 t = test.text.tolist()
 pred = []
