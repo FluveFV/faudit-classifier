@@ -1,0 +1,8 @@
+tuned_model/label_mapping.json filter=lfs diff=lfs merge=lfs -text
+tuned_model/model.safetensors filter=lfs diff=lfs merge=lfs -text
+tuned_model/optimizer.pt filter=lfs diff=lfs merge=lfs -text
+tuned_model/special_tokens_map.json filter=lfs diff=lfs merge=lfs -text
+tuned_model/tokenizer_config.json filter=lfs diff=lfs merge=lfs -text
+tuned_model/tokenizer.json filter=lfs diff=lfs merge=lfs -text
+tuned_model/vocab.txt filter=lfs diff=lfs merge=lfs -text
+tuned_model/config.json filter=lfs diff=lfs merge=lfs -text
