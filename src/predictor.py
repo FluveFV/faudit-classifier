@@ -36,13 +36,15 @@ model_path = "tuned_model"
 tokenizer = AutoTokenizer.from_pretrained(model_path)
 config = AutoConfig.from_pretrained(model_path)
 
-# Load custom model
 model = BertForSentenceClassification.from_pretrained(
     model_path,
     config=config,
     model_name="dbmdz/bert-base-italian-xxl-cased",
     num_labels=config.num_labels
 )
+
+# Initialize Dataloader class in case no training has occurred
+# (Dataloader automatically creates the mapping file 'reverse_encoding.json')
 dataloader = Dataloader(file_path='dataset_BERT/addestramento.csv')
 dataloader.load_data()
 
@@ -54,9 +56,13 @@ except FileNotFoundError:
     print('exiting')
     raise FileNotFoundError
 
-#Levels of the prediction: just the label, macrocategoria, campo, or a combination of the three
+
 correspondence = pd.read_csv("dataset_BERT/correspondence.csv")
+
 # Simple example for use
+#    Levels of prediction:
+#      - label (one or multiple)
+#      - label (one or multiple), macrocategoria (idem), campo (idem)
 
 def correct_input(s=None):
     """Ensures the user inputs 'y' or 'n'."""
@@ -84,14 +90,19 @@ def one_label(inputs):
         predicted_index = torch.argmax(logits, dim=-1).item()
         result = label_mapping[predicted_index] + 1
         return result
-def multiple_labels(inputs):
+def multiple_labels(inputs, k=3):
     with torch.no_grad():
         logits = model(**inputs).logits
         sigmoid = torch.nn.Sigmoid()
         probs = sigmoid(logits.squeeze().cpu())
-        predictions = np.zeros(probs.shape)
-        predictions[np.where(probs >= 0.6)] = 1
-        result = [label_mapping[idx] + 1 for idx, label in enumerate(predictions) if label == 1.0]
+
+        indices_above_threshold = (probs >= 0.6).nonzero(as_tuple=True)[0]
+
+        probs_above_threshold = probs[indices_above_threshold]
+        sorted_indices = probs_above_threshold.argsort(descending=True)
+
+        top_k_indices = indices_above_threshold[sorted_indices][:k]
+        result = [label_mapping[int(idx)] + 1 for idx in top_k_indices]
         return result
 def answer(ID_tassonomia):
     """
@@ -107,13 +118,12 @@ def answer(ID_tassonomia):
 print('Start prediction?')
 testing_model = correct_input()
 
-
 while testing_model == 'y':
     description = get_multiline_input()
     inputs = tokenizer(description, return_tensors="pt", truncation=True, padding=True, return_token_type_ids=False)
     if k > 1:
         #Multilabel case
-        pred = multiple_labels(inputs)
+        pred = multiple_labels(inputs=inputs, k=k)
         print('___________  Result:  ___________')
         print('ID tassonomie di azione:')
         print(pred)
@@ -145,7 +155,7 @@ while testing_model == 'y':
     print('Would you like to test another description?')
     testing_model = correct_input()
 
-
+'''
 ## debugging set: in case the model isn't loading, you can try to use the following to run the prediction on 300 observations
 test = pd.read_csv('dataset_BERT/addestramento.csv').iloc[:100, -2:]
 t = test.text.tolist()
@@ -169,4 +179,4 @@ for text in tqdm(t):
 pd.DataFrame({'Text': t,
               'true_label': test.label.tolist(),
               'predicted_label': pred}).to_csv('test_predictor.csv', index=False)
-
+'''
