@@ -34,7 +34,7 @@ After loading the pretrained model, ```predictor.py``` given a text will output 
 The user can test more texts. There is no lower or upper limit to the size of the input, but the BERT will only use the first 512 tokenized elements of the text. 
 From the terminal, the user can insert the text they want to test. 
 
-Examples of usage from terminal (parameters from users may not when used in a notebook environment)
+Examples of usage from terminal (parameters from users may not work when used in a notebook environment)
 ```bash
 python3 predictor.py -k 2 -m
 ```
