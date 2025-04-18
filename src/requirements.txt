@@ -1,6 +1,6 @@
 accelerate==1.1.1
 datasets==3.1.0
-torch==2.5.1
+torch==2.6.0
 torch_tensorrt==2.5.0
 torchmetrics==1.6.0
 torchtext==0.18.0
