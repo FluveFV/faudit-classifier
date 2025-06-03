@@ -1,4 +1,9 @@
 #  FamilyAudit-Classifier
+## ⚠️⚠️⚠️ Outdated ⚠️⚠️⚠️
+
+This repository is an older and incompatible version of [P1-ClassificatoreAzioni]([https://github.com/YourUser/NewRepoName](https://github.com/FluveFV/P1-ClassificatoreAzioni.git)).  
+It is preserved for reference purposes only. Please use the newer version for current work.
+
 
 #### AIxPA
 
